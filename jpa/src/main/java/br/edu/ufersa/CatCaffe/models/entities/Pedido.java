@@ -1,11 +1,19 @@
 package br.edu.ufersa.CatCaffe.models.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Time;
 import java.util.Date;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,35 +28,15 @@ public class Pedido {
     @Column(nullable = false,length = 20)
     private String status;
 
-    public void setId(int id) {
-        this.id_pedido = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario")
+    private Funcionario funcionario;
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
 
-    public void setTime(Time time) {
-        this.time = time;
-    }
+    @Column(nullable = false,length = 20)
+    private String forma_pag;
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public int getId() {
-        return id_pedido;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public Time getTime() {
-        return time;
-    }
 }

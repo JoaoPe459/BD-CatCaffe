@@ -1,8 +1,17 @@
 package br.edu.ufersa.CatCaffe.models.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+
 public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,35 +26,7 @@ public class Endereco {
     @Column(nullable = false)
     private String n_casa;
 
-    public int getId_endereco() {
-        return id_endereco;
-    }
+    @OneToOne
+    private Cliente cliente;
 
-    public void setId_endereco(int id_endereco) {
-        this.id_endereco = id_endereco;
-    }
-
-    public String getRua() {
-        return rua;
-    }
-
-    public void setRua(String rua) {
-        this.rua = rua;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getN_casa() {
-        return n_casa;
-    }
-
-    public void setN_casa(String n_casa) {
-        this.n_casa = n_casa;
-    }
 }

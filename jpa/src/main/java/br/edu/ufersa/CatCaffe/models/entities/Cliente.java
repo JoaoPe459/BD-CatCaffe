@@ -1,29 +1,39 @@
 package br.edu.ufersa.CatCaffe.models.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cliente {
+
+    @Column(name = "id_cliente")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_cliente;
+    private int id;
 
     @Column(nullable = false)
-    private String nome_cliente;
+    private String nomeCliente;
 
-    public int getId_cliente() {
-        return id_cliente;
-    }
+    @Column
+    @OneToMany(mappedBy = "id_pedido")
+    private List<Pedido> pedidos;
 
-    public void setId_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
-    }
+    @Column
+    @OneToMany(mappedBy = "id_gato")
+    private List<Gato> gato;
 
-    public String getNome_cliente() {
-        return nome_cliente;
-    }
+    @OneToOne
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
 
-    public void setNome_cliente(String nome_cliente) {
-        this.nome_cliente = nome_cliente;
-    }
+
 }
