@@ -1,4 +1,4 @@
-package com.CatCaffe.jpa;
+package br.edu.ufersa.CatCaffe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
