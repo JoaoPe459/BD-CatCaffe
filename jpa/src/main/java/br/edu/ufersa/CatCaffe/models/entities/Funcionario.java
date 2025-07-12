@@ -2,13 +2,15 @@ package br.edu.ufersa.CatCaffe.models.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,8 +29,8 @@ public class Funcionario extends Usuario{
     private String cargo;
 
     @Column
-    @OneToMany(mappedBy = "funcionario")
-    private List<Pedido> pedidos;
+    @OneToMany(mappedBy = "funcionario",fetch = FetchType.LAZY)
+    private Set<Pedido> pedidos = new HashSet<>();
 
 
 }

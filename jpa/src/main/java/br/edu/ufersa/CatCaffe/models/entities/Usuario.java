@@ -2,8 +2,16 @@ package br.edu.ufersa.CatCaffe.models.entities;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,46 +28,5 @@ public abstract class Usuario {
 
     @Column(nullable = false,length = 30)
     private String senha;
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setId(int id) {
-        if (id>0){
-        this.id_usuario = id;
-    }}
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public int getId() {
-        return id_usuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
 
 }

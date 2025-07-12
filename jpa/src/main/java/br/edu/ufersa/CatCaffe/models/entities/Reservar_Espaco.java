@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -25,7 +27,6 @@ public class Reservar_Espaco {
     @Column(nullable = false)
     private Time time_espaco;
 
-    @ManyToMany
-    @JoinColumn(name = "Espaco")
-    private Cliente cliente;
+    @ManyToMany(mappedBy = "reservarEspacos", fetch = FetchType.LAZY)
+    private Set<Cliente> cliente = new HashSet<>();
 }

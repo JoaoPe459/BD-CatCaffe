@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,15 +27,21 @@ public class Cliente {
 
     @Column
     @OneToMany(mappedBy = "id_pedido")
-    private List<Pedido> pedidos;
+    private Set<Pedido> pedidos;
 
     @Column
     @OneToMany(mappedBy = "id_gato")
-    private List<Gato> gato;
+    private Set<Gato> gato = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;
 
+    @ManyToMany
+    @JoinTable(
+            name = "Cliente_reserva",
+            joinColumns = @JoinColumn(name = "id_cliente"),
+            inverseJoinColumns = @JoinColumn (name = "id_reserva"))
+    private Set<Reservar_Espaco> reservarEspacos = new HashSet<>();
 
 }

@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +25,10 @@ public class Compra {
     @Column(nullable = false)
     private boolean entrega;
 
+    @OneToMany
+    private Set<Produto> produto = new HashSet<>() ;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pedido")
+    private Pedido pedido;
 }

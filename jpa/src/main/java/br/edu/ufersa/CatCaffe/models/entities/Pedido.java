@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -28,6 +30,10 @@ public class Pedido {
     @Column(nullable = false,length = 20)
     private String status;
 
+
+    @Column(nullable = false,length = 20)
+    private String forma_pag;
+
     @ManyToOne
     @JoinColumn(name = "id_funcionario")
     private Funcionario funcionario;
@@ -36,7 +42,7 @@ public class Pedido {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @Column(nullable = false,length = 20)
-    private String forma_pag;
+    @OneToMany
+    private Set<Compra> compra = new HashSet<>();
 
 }

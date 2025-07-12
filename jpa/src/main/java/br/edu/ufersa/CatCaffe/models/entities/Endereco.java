@@ -27,6 +27,7 @@ public class Endereco {
     private String n_casa;
 
     @OneToOne
+    @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
 }
