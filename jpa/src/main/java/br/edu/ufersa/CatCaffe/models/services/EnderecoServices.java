@@ -1,6 +1,5 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
-import br.edu.ufersa.CatCaffe.models.dtos.ClienteRecordDto;
 import br.edu.ufersa.CatCaffe.models.dtos.EnderecoRecordDto;
 import br.edu.ufersa.CatCaffe.models.entities.Cliente;
 import br.edu.ufersa.CatCaffe.models.entities.Endereco;
@@ -39,6 +38,9 @@ public class EnderecoServices {
 
     @Transactional
     public void deleteEndereco(Long id) {
+        if (enderecoRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Endereco não encontrada");
+        }
         enderecoRepository.deleteById(id);
     }
 

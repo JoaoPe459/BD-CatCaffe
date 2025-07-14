@@ -23,10 +23,10 @@ public class Pedido {
     private Long id_pedido;
 
     @Column(nullable = false)
-    private Date date;
+    private Date data;
 
     @Column(nullable = false)
-    private Time time;
+    private Time horario;
 
     @Column(nullable = false,length = 20)
     private String status;

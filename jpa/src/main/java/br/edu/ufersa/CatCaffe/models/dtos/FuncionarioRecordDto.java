@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 
 public record FuncionarioRecordDto(Long id_usuario,
                                    String nome,
-                                   long salario,
-                                   BigDecimal cargo) {
+                                   BigDecimal salario,
+                                   String cargo) {
 }

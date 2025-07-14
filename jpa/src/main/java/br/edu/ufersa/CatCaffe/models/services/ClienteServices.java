@@ -1,7 +1,6 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
 import br.edu.ufersa.CatCaffe.models.dtos.ClienteRecordDto;
-import br.edu.ufersa.CatCaffe.models.dtos.EnderecoRecordDto;
 import br.edu.ufersa.CatCaffe.models.entities.Cliente;
 import br.edu.ufersa.CatCaffe.models.entities.Endereco;
 import br.edu.ufersa.CatCaffe.models.repositories.ClienteRepository;
@@ -45,6 +44,9 @@ public class ClienteServices {
 
     @Transactional
     public void deleteCliente(Long id) {
+        if (clienteRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrada");
+        }
         clienteRepository.deleteById(id);
     }
 
