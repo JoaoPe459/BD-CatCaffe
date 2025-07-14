@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_pedido;
+    private Long id_pedido;
 
     @Column(nullable = false)
     private Date date;
@@ -29,7 +30,6 @@ public class Pedido {
 
     @Column(nullable = false,length = 20)
     private String status;
-
 
     @Column(nullable = false,length = 20)
     private String forma_pag;
@@ -42,7 +42,9 @@ public class Pedido {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @OneToMany
+    @OneToMany(mappedBy = "pedido")
     private Set<Compra> compra = new HashSet<>();
 
+    @Column(nullable = false)
+    private BigDecimal preco_total;
 }

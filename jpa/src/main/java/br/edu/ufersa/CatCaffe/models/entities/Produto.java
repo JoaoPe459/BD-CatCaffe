@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -14,13 +16,13 @@ import lombok.Setter;
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_produto;
+    private Long id_produto;
 
     @Column(nullable = false,length = 50)
     private String nome_produto;
 
     @Column(nullable = false)
-    private int preco;
+    private BigDecimal preco;
 
     @Column(nullable = false,length = 50)
     private String item;

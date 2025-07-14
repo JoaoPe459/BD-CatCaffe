@@ -17,7 +17,7 @@ import java.util.List;
 public class Gato {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_gato;
+    private Long id_gato;
 
     @Column(nullable = false,length = 50)
     private String nome_gato;

@@ -19,14 +19,14 @@ import java.util.Set;
 public class Reservar_Espaco {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_espaco;
+    private Long id_reserva;
 
     @Column(nullable = false)
-    private Date date_espaco;
+    private Date data;
 
     @Column(nullable = false)
-    private Time time_espaco;
+    private Time horario;
 
-    @ManyToMany(mappedBy = "reservarEspacos", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "cliente_reserva", fetch = FetchType.LAZY)
     private Set<Cliente> cliente = new HashSet<>();
 }

@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_endereco;
+    private Long id_endereco;
 
     @Column(nullable = false)
     private String rua;
@@ -26,8 +26,7 @@ public class Endereco {
     @Column(nullable = false)
     private String n_casa;
 
-    @OneToOne
-    @JoinColumn(name = "id_cliente")
+    @OneToOne(mappedBy = "endereco")
     private Cliente cliente;
 
 }

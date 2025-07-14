@@ -12,10 +12,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_usuario;
+    private Long id_usuario;
 
     @Column(nullable = false, unique = true,length = 50)
     private String username;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,15 +18,15 @@ import java.util.Set;
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id_compra;
 
     @Column(nullable = false)
-    private int precoTotal;
+    private BigDecimal precoTotal;
 
     @Column(nullable = false)
     private boolean entrega;
 
-    @OneToMany
+    @OneToMany(mappedBy = "compra")
     private Set<Produto> produto = new HashSet<>() ;
 
     @ManyToOne
