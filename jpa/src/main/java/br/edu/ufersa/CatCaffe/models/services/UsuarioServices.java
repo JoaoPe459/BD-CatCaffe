@@ -20,12 +20,12 @@ public class UsuarioServices {
     }
 
     @Transactional
-    public Usuario saveUsuario(UsuarioRecordDto dto) {
+    public Usuario saveUsuario(UsuarioRecordDto usuarioRecordDto) {
         Usuario usuario = new Usuario();
-        usuario.setUsername(dto.username());
-        usuario.setEmail(dto.email());
-        usuario.setTelefone(dto.telefone());
-        usuario.setSenha(dto.senha());
+        usuario.setUsername(usuarioRecordDto.username());
+        usuario.setEmail(usuarioRecordDto.email());
+        usuario.setTelefone(usuarioRecordDto.telefone());
+        usuario.setSenha(usuarioRecordDto.senha());
 
         return usuarioRepository.save(usuario);
     }
