@@ -4,7 +4,7 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.Set;
 
-public record ReservarEspaçoRecordDto(Long id_reserva,
+public record ReservarEspacoRecordDto(Long id_reserva,
                                       Set<Long> id_cliente,
                                       Date data,
                                       Time horario) {

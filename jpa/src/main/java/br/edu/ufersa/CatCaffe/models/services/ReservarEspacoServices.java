@@ -1,6 +1,6 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
-import br.edu.ufersa.CatCaffe.models.dtos.ReservarEspaçoRecordDto;
+import br.edu.ufersa.CatCaffe.models.dtos.ReservarEspacoRecordDto;
 import br.edu.ufersa.CatCaffe.models.entities.Cliente;
 import br.edu.ufersa.CatCaffe.models.entities.Reservar_Espaco;
 import br.edu.ufersa.CatCaffe.models.repositories.ClienteRepository;
@@ -26,7 +26,7 @@ public class ReservarEspacoServices {
     }
 
     @Transactional
-    public Reservar_Espaco saveReserva(ReservarEspaçoRecordDto dto) {
+    public Reservar_Espaco saveReserva(ReservarEspacoRecordDto dto) {
         Reservar_Espaco reserva = new Reservar_Espaco();
         reserva.setData(dto.data());
         reserva.setHorario(dto.horario());
@@ -54,7 +54,7 @@ public class ReservarEspacoServices {
     }
 
     @Transactional
-    public Reservar_Espaco editReserva(ReservarEspaçoRecordDto dto) {
+    public Reservar_Espaco editReserva(ReservarEspacoRecordDto dto) {
         Reservar_Espaco reserva = reservarEspacoRepository.findById(dto.id_reserva())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva não encontrada"));
 
