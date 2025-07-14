@@ -24,9 +24,9 @@ public class EnderecoServices {
     @Transactional
     public Endereco saveEndereco(EnderecoRecordDto enderecoRecordDto) {
         Endereco endereco = new Endereco();
-        endereco.setN_casa(enderecoRecordDto.n_casa());
-        endereco.setRua(enderecoRecordDto.rua());
-        endereco.setBairro(enderecoRecordDto.bairro());
+        endereco.setCep(enderecoRecordDto.cep());
+        endereco.setRuaENumero(enderecoRecordDto.ruaENumero());
+        endereco.setCidade(enderecoRecordDto.cidade());
         assert clienteRepository != null;
         endereco.setCliente(clienteRepository.findById(enderecoRecordDto.id_cliente()).orElseThrow(() -> new RuntimeException("Cliente não encontrado")));
         return enderecoRepository.save(endereco);
@@ -48,9 +48,9 @@ public class EnderecoServices {
         Endereco endereco = enderecoRepository.findById(enderecoRecordDto.id_endereco())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Endereco não encontrado"));
 
-        endereco.setRua(enderecoRecordDto.rua());
-        endereco.setBairro(enderecoRecordDto.bairro());
-        endereco.setN_casa(enderecoRecordDto.n_casa());
+        endereco.setRuaENumero(enderecoRecordDto.ruaENumero());
+        endereco.setCidade(enderecoRecordDto.cidade());
+        endereco.setCep(enderecoRecordDto.cep());
 
         Cliente cliente = clienteRepository.findById(enderecoRecordDto.id_cliente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));

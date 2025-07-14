@@ -37,9 +37,9 @@ public class EnderecoController {
     public ResponseEntity<Endereco> atualizarEndereco(@PathVariable Long id, @RequestBody EnderecoRecordDto dto) {
         EnderecoRecordDto dtoAtualizado = new EnderecoRecordDto(
                 id,
-                dto.rua(),
-                dto.bairro(),
-                dto.n_casa(),
+                dto.ruaENumero(),
+                dto.cidade(),
+                dto.cep(),
                 dto.id_cliente()
         );
         Endereco enderecoEditado = enderecoServices.editEndereco(dtoAtualizado);

@@ -18,13 +18,13 @@ public class Endereco {
     private Long id_endereco;
 
     @Column(nullable = false)
-    private String rua;
+    private String ruaENumero;
 
     @Column(nullable = false)
-    private String bairro;
+    private String cidade;
 
     @Column(nullable = false)
-    private String n_casa;
+    private String cep;
 
     @OneToOne(mappedBy = "endereco")
     private Cliente cliente;
