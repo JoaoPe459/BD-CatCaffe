@@ -31,49 +31,10 @@ public class Usuario {
     private String senha;
 
     public Usuario(String username, String email, String telefone, String senha) {
-        setUsername(username);
-        setEmail(email);
-        setTelefone(telefone);
-        setSenha(senha);
-    }
-
-    public Long getId_usuario() {
-        return id_usuario;
-    }
-
-    public void setId_usuario(Long id_usuario) {
-        this.id_usuario = id_usuario;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
         this.senha = senha;
     }
+
 }
