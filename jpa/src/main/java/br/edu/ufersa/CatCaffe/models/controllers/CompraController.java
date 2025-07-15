@@ -28,7 +28,8 @@ public class CompraController {
     public ResponseEntity <List<Compra>> listarCompra(){
         return ResponseEntity.ok(compraServices.getAllCompras());
     }
-    @PutMapping
+
+    @PutMapping("/{id}")
     public ResponseEntity<Compra> atualizarCompra(@PathVariable Long id, @RequestBody CompraRecordDto dto){
         CompraRecordDto dtoAtualizado = new CompraRecordDto(
                 id,
