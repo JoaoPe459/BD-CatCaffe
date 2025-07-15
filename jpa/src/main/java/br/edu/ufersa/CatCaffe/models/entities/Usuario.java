@@ -36,4 +36,5 @@ public class Usuario {
         this.telefone = telefone;
         this.senha = senha;
     }
+
 }
