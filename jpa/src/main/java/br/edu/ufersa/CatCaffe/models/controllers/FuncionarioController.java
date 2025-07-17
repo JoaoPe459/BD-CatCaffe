@@ -1,7 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.FuncionarioRecordDto;
-import br.edu.ufersa.CatCaffe.models.entities.Funcionario;
+import br.edu.ufersa.CatCaffe.models.dtos.request.FuncionarioRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.FuncionarioResponseDto;
 import br.edu.ufersa.CatCaffe.models.services.FuncionarioServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +21,21 @@ public class FuncionarioController {
 
     // POST - Criar funcionário
     @PostMapping
-    public ResponseEntity<Funcionario> criarFuncionario(@RequestBody FuncionarioRecordDto dto) {
-        Funcionario novoFuncionario = funcionarioServices.saveFuncionario(dto);
+    public ResponseEntity<FuncionarioResponseDto> criarFuncionario(@RequestBody FuncionarioRequestDto dto) {
+        FuncionarioResponseDto novoFuncionario = funcionarioServices.saveFuncionario(dto);
         return new ResponseEntity<>(novoFuncionario, HttpStatus.CREATED);
     }
 
     // GET - Listar todos os funcionários
     @GetMapping
-    public ResponseEntity<List<Funcionario>> listarFuncionarios() {
+    public ResponseEntity<List<FuncionarioResponseDto>> listarFuncionarios() {
         return ResponseEntity.ok(funcionarioServices.getAllFuncionarios());
     }
 
     // PUT - Atualizar funcionário
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Long id, @RequestBody FuncionarioRecordDto dto) {
-        FuncionarioRecordDto dtoAtualizado = new FuncionarioRecordDto(
-                id,
-                dto.nome(),
-                dto.salario(),
-                dto.cargo()
-        );
-        Funcionario funcionarioAtualizado = funcionarioServices.editFuncionario(dtoAtualizado);
+    public ResponseEntity<FuncionarioResponseDto> atualizarFuncionario(@PathVariable Long id, @RequestBody FuncionarioRequestDto dto) {
+        FuncionarioResponseDto funcionarioAtualizado = funcionarioServices.editFuncionario(id, dto);
         return ResponseEntity.ok(funcionarioAtualizado);
     }
 

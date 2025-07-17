@@ -32,4 +32,6 @@ public class Compra {
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
+
+
 }

@@ -1,6 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
-import br.edu.ufersa.CatCaffe.models.dtos.PedidoRecordDto;
+import br.edu.ufersa.CatCaffe.models.dtos.request.PedidoRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.PedidoResponseDto;
 import br.edu.ufersa.CatCaffe.models.entities.Cliente;
 import br.edu.ufersa.CatCaffe.models.entities.Funcionario;
 import br.edu.ufersa.CatCaffe.models.entities.Pedido;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoServices {
@@ -29,27 +31,44 @@ public class PedidoServices {
         this.funcionarioRepository = funcionarioRepository;
     }
 
+    // Método auxiliar para converter entidade Pedido em DTO de resposta
+    private PedidoResponseDto toResponseDto(Pedido pedido) {
+        return new PedidoResponseDto(
+                pedido.getId_pedido(),
+                pedido.getCliente().getId_cliente(),
+                pedido.getFuncionario().getId_usuario(),
+                pedido.getData(),
+                pedido.getHorario(),
+                pedido.getStatus(),
+                pedido.getForma_pag()
+        );
+    }
+
     @Transactional
-    public Pedido savePedido(PedidoRecordDto pedidoRecordDto) {
+    public PedidoResponseDto savePedido(PedidoRequestDto pedidoRequestDto) {
         Pedido pedido = new Pedido();
 
-        Cliente cliente = clienteRepository.findById(pedidoRecordDto.id_cliente())
+        Cliente cliente = clienteRepository.findById(pedidoRequestDto.getId_cliente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
-        Funcionario funcionario = funcionarioRepository.findById(pedidoRecordDto.id_funcionario())
+        Funcionario funcionario = funcionarioRepository.findById(pedidoRequestDto.getId_funcionario())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Funcionário não encontrado"));
 
         pedido.setCliente(cliente);
         pedido.setFuncionario(funcionario);
-        pedido.setData(pedidoRecordDto.data());
-        pedido.setHorario(pedidoRecordDto.hora());
-        pedido.setStatus(pedidoRecordDto.status());
-        pedido.setForma_pag(pedidoRecordDto.forma_pag());
+        pedido.setData(pedidoRequestDto.getData());
+        pedido.setHorario(pedidoRequestDto.getHora());
+        pedido.setStatus(pedidoRequestDto.getStatus());
+        pedido.setForma_pag(pedidoRequestDto.getForma_pag());
 
-        return pedidoRepository.save(pedido);
+        Pedido salvo = pedidoRepository.save(pedido);
+        return toResponseDto(salvo);
     }
 
-    public List<Pedido> getAllPedidos() {
-        return pedidoRepository.findAll();
+    public List<PedidoResponseDto> getAllPedidos() {
+        return pedidoRepository.findAll()
+                .stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -61,22 +80,25 @@ public class PedidoServices {
     }
 
     @Transactional
-    public Pedido editPedido(PedidoRecordDto pedidoRecordDto) {
-        Pedido pedido = pedidoRepository.findById(pedidoRecordDto.id_pedido())
+    public PedidoResponseDto editPedido(Long id, PedidoRequestDto dto) {
+        Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
 
-        Cliente cliente = clienteRepository.findById(pedidoRecordDto.id_cliente())
+        Cliente cliente = clienteRepository.findById(dto.getId_cliente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
-        Funcionario funcionario = funcionarioRepository.findById(pedidoRecordDto.id_funcionario())
+
+        Funcionario funcionario = funcionarioRepository.findById(dto.getId_funcionario())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Funcionário não encontrado"));
 
         pedido.setCliente(cliente);
         pedido.setFuncionario(funcionario);
-        pedido.setData(pedidoRecordDto.data());
-        pedido.setHorario(pedidoRecordDto.hora());
-        pedido.setStatus(pedidoRecordDto.status());
-        pedido.setForma_pag(pedidoRecordDto.forma_pag());
+        pedido.setData(dto.getData());
+        pedido.setHorario(dto.getHora());
+        pedido.setStatus(dto.getStatus());
+        pedido.setForma_pag(dto.getForma_pag());
 
-        return pedidoRepository.save(pedido);
+        pedido = pedidoRepository.save(pedido);
+        return toResponseDto(pedido);
     }
+
 }

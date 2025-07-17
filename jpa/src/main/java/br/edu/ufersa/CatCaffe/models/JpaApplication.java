@@ -14,12 +14,5 @@ public class JpaApplication {
     public static void main(String[] args) {
         ApplicationContext context =SpringApplication.run(JpaApplication.class, args);
         UsuarioServices usuarioServices = context.getBean(UsuarioServices.class);
-        UsuarioRecordDto novoUsuario = new UsuarioRecordDto(
-                null,
-                "joão",
-                "joao@gmail.com",
-                "84998935363",
-                "senha123");
-        usuarioServices.saveUsuario(novoUsuario);
     }
 }

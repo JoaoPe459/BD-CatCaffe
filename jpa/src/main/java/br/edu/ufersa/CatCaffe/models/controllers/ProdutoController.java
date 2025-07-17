@@ -1,7 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.ProdutoRecordDto;
-import br.edu.ufersa.CatCaffe.models.entities.Produto;
+import br.edu.ufersa.CatCaffe.models.dtos.request.ProdutoRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.ProdutoResponseDto;
 import br.edu.ufersa.CatCaffe.models.services.ProdutoServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,30 +21,21 @@ public class ProdutoController {
 
     // POST - Criar produto
     @PostMapping
-    public ResponseEntity<Produto> criarProduto(@RequestBody ProdutoRecordDto dto) {
-        Produto novoProduto = produtoServices.saveProduto(dto);
+    public ResponseEntity<ProdutoResponseDto> criarProduto(@RequestBody ProdutoRequestDto dto) {
+        ProdutoResponseDto novoProduto = produtoServices.saveProduto(dto);
         return new ResponseEntity<>(novoProduto, HttpStatus.CREATED);
     }
 
     // GET - Listar todos os produtos
     @GetMapping
-    public ResponseEntity<List<Produto>> listarProdutos() {
+    public ResponseEntity<List<ProdutoResponseDto>> listarProdutos() {
         return ResponseEntity.ok(produtoServices.getAllProdutos());
     }
 
     // PUT - Atualizar produto
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRecordDto dto) {
-        ProdutoRecordDto dtoAtualizado = new ProdutoRecordDto(
-                id,
-                dto.nome_produto(),
-                dto.preco(),
-                dto.item(),
-                dto.adicional(),
-                dto.id_compra()
-        );
-
-        Produto produtoAtualizado = produtoServices.editProduto(dtoAtualizado);
+    public ResponseEntity<ProdutoResponseDto> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRequestDto dto) {
+        ProdutoResponseDto produtoAtualizado = produtoServices.editProduto(id, dto);
         return ResponseEntity.ok(produtoAtualizado);
     }
 

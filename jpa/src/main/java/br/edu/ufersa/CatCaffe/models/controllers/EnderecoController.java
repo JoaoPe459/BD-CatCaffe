@@ -1,7 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.EnderecoRecordDto;
-import br.edu.ufersa.CatCaffe.models.entities.Endereco;
+import br.edu.ufersa.CatCaffe.models.dtos.request.EnderecoRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.EnderecoResponseDto;
 import br.edu.ufersa.CatCaffe.models.services.EnderecoServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,29 +21,25 @@ public class EnderecoController {
 
     // POST: Criar novo endereço
     @PostMapping
-    public ResponseEntity<Endereco> criarEndereco(@RequestBody EnderecoRecordDto dto) {
-        Endereco novoEndereco = enderecoServices.saveEndereco(dto);
+    public ResponseEntity<EnderecoResponseDto> criarEndereco(@RequestBody EnderecoRequestDto dto) {
+        EnderecoResponseDto novoEndereco = enderecoServices.saveEndereco(dto);
         return new ResponseEntity<>(novoEndereco, HttpStatus.CREATED);
     }
 
     // GET: Listar todos os endereços
     @GetMapping
-    public ResponseEntity<List<Endereco>> listarEnderecos() {
+    public ResponseEntity<List<EnderecoResponseDto>> listarEnderecos() {
         return ResponseEntity.ok(enderecoServices.getAllEndereco());
     }
 
     // PUT: Atualizar endereço por ID
     @PutMapping("/{id}")
-    public ResponseEntity<Endereco> atualizarEndereco(@PathVariable Long id, @RequestBody EnderecoRecordDto dto) {
-        EnderecoRecordDto dtoAtualizado = new EnderecoRecordDto(
-                id,
-                dto.ruaENumero(),
-                dto.cidade(),
-                dto.cep(),
-                dto.id_cliente()
-        );
-        Endereco enderecoEditado = enderecoServices.editEndereco(dtoAtualizado);
-        return ResponseEntity.ok(enderecoEditado);
+    public ResponseEntity<EnderecoResponseDto> atualizarEndereco(
+            @PathVariable Long id,
+            @RequestBody EnderecoRequestDto dto
+    ) {
+        EnderecoResponseDto enderecoAtualizado = enderecoServices.editEndereco(id, dto);
+        return ResponseEntity.ok(enderecoAtualizado);
     }
 
     // DELETE: Deletar endereço por ID

@@ -1,7 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.UsuarioRecordDto;
-import br.edu.ufersa.CatCaffe.models.entities.Usuario;
+import br.edu.ufersa.CatCaffe.models.dtos.request.UsuarioRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.UsuarioResponseDto;
 import br.edu.ufersa.CatCaffe.models.services.UsuarioServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +21,21 @@ public class UsuarioController {
 
     // POST - Criar usuário
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody UsuarioRecordDto dto) {
-        Usuario usuario = usuarioServices.saveUsuario(dto);
+    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioRequestDto dto) {
+        UsuarioResponseDto usuario = usuarioServices.saveUsuario(dto);
         return new ResponseEntity<>(usuario, HttpStatus.CREATED);
     }
 
     // GET - Listar todos os usuários
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
+    public ResponseEntity<List<UsuarioResponseDto>> listarUsuarios() {
         return ResponseEntity.ok(usuarioServices.getAllUsuarios());
     }
 
     // PUT - Atualizar usuário
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRecordDto dto) {
-        UsuarioRecordDto dtoAtualizado = new UsuarioRecordDto(
-                id,
-                dto.username(),
-                dto.email(),
-                dto.telefone(),
-                dto.senha()
-        );
-        Usuario usuarioAtualizado = usuarioServices.editUsuario(dtoAtualizado);
+    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto dto) {
+        UsuarioResponseDto usuarioAtualizado = usuarioServices.editUsuario(id, dto);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
