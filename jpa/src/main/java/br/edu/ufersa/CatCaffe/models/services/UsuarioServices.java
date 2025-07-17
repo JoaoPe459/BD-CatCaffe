@@ -1,6 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
-import br.edu.ufersa.CatCaffe.models.dtos.UsuarioRecordDto;
+import br.edu.ufersa.CatCaffe.models.dtos.request.UsuarioRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.UsuarioResponseDto;
 import br.edu.ufersa.CatCaffe.models.entities.Usuario;
 import br.edu.ufersa.CatCaffe.models.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioServices {
@@ -20,18 +22,21 @@ public class UsuarioServices {
     }
 
     @Transactional
-    public Usuario saveUsuario(UsuarioRecordDto usuarioRecordDto) {
+    public UsuarioResponseDto saveUsuario(UsuarioRequestDto dto) {
         Usuario usuario = new Usuario();
-        usuario.setUsername(usuarioRecordDto.username());
-        usuario.setEmail(usuarioRecordDto.email());
-        usuario.setTelefone(usuarioRecordDto.telefone());
-        usuario.setSenha(usuarioRecordDto.senha());
+        usuario.setUsername(dto.getUsername());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setSenha(dto.getSenha());
 
-        return usuarioRepository.save(usuario);
+        Usuario saved = usuarioRepository.save(usuario);
+        return toResponseDto(saved);
     }
 
-    public List<Usuario> getAllUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDto> getAllUsuarios() {
+        return usuarioRepository.findAll().stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -42,15 +47,26 @@ public class UsuarioServices {
         usuarioRepository.deleteById(id);
     }
 
-    public Usuario editUsuario(UsuarioRecordDto dto) {
-        Usuario usuario = usuarioRepository.findById(dto.id_usuario())
+    @Transactional
+    public UsuarioResponseDto editUsuario(Long id, UsuarioRequestDto dto) {
+        Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
-        usuario.setUsername(dto.username());
-        usuario.setEmail(dto.email());
-        usuario.setTelefone(dto.telefone());
-        usuario.setSenha(dto.senha());
+        usuario.setUsername(dto.getUsername());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setSenha(dto.getSenha());
 
-        return usuarioRepository.save(usuario);
+        Usuario updated = usuarioRepository.save(usuario);
+        return toResponseDto(updated);
+    }
+
+    private UsuarioResponseDto toResponseDto(Usuario usuario) {
+        return new UsuarioResponseDto(
+                usuario.getId_usuario(),
+                usuario.getUsername(),
+                usuario.getEmail(),
+                usuario.getTelefone()
+        );
     }
 }

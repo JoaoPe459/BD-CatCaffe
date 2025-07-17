@@ -1,6 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
-import br.edu.ufersa.CatCaffe.models.dtos.CompraRecordDto;
+import br.edu.ufersa.CatCaffe.models.dtos.request.CompraRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.CompraResponseDto;
 import br.edu.ufersa.CatCaffe.models.entities.Compra;
 import br.edu.ufersa.CatCaffe.models.entities.Pedido;
 import br.edu.ufersa.CatCaffe.models.repositories.CompraRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CompraServices {
@@ -24,41 +26,53 @@ public class CompraServices {
     }
 
     @Transactional
-    public Compra saveCompra(CompraRecordDto compraRecordDto) {
+    public CompraResponseDto saveCompra(CompraRequestDto dto) {
         Compra compra = new Compra();
 
-        Pedido pedido = pedidoRepository.findById(compraRecordDto.id_pedido())
+        Pedido pedido = pedidoRepository.findById(dto.getIdPedido())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
 
         compra.setPedido(pedido);
-        compra.setEntrega(compraRecordDto.entrega());
+        compra.setEntrega(dto.getEntrega());
 
-        return compraRepository.save(compra);
+        Compra saved = compraRepository.save(compra);
+        return toResponseDto(saved);
     }
 
-    public List<Compra> getAllCompras() {
-        return compraRepository.findAll();
+    public List<CompraResponseDto> getAllCompras() {
+        return compraRepository.findAll()
+                .stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void deleteCompra(Long id) {
-        if (compraRepository.existsById(id)){
+        if (!compraRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Compra não encontrada");
         }
-            compraRepository.deleteById(id);
-
+        compraRepository.deleteById(id);
     }
 
-    public Compra editCompra(CompraRecordDto compraRecordDto) {
-        Compra compra = compraRepository.findById(compraRecordDto.id_compra())
+    public CompraResponseDto editCompra(Long idCompra, CompraRequestDto dto) {
+        Compra compra = compraRepository.findById(idCompra)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Compra não encontrada"));
 
-        Pedido pedido = pedidoRepository.findById(compraRecordDto.id_pedido())
+        Pedido pedido = pedidoRepository.findById(dto.getIdPedido())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
 
         compra.setPedido(pedido);
-        compra.setEntrega(compraRecordDto.entrega());
+        compra.setEntrega(dto.getEntrega());
 
-        return compraRepository.save(compra);
+        Compra updated = compraRepository.save(compra);
+        return toResponseDto(updated);
+    }
+
+    private CompraResponseDto toResponseDto(Compra compra) {
+        return new CompraResponseDto(
+                compra.getId_compra(),
+                compra.getPedido().getId_pedido(),
+                compra.isEntrega()
+        );
     }
 }

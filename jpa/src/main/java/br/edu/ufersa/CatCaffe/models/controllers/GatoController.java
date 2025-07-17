@@ -1,7 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.GatoRecordDto;
-import br.edu.ufersa.CatCaffe.models.entities.Gato;
+import br.edu.ufersa.CatCaffe.models.dtos.request.GatoRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.GatoResponseDto;
 import br.edu.ufersa.CatCaffe.models.services.GatoServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,30 +21,21 @@ public class GatoController {
 
     // POST - Criar gato
     @PostMapping
-    public ResponseEntity<Gato> criarGato(@RequestBody GatoRecordDto dto) {
-        Gato novoGato = gatoServices.saveGato(dto);
+    public ResponseEntity<GatoResponseDto> criarGato(@RequestBody GatoRequestDto dto) {
+        GatoResponseDto novoGato = gatoServices.saveGato(dto);
         return new ResponseEntity<>(novoGato, HttpStatus.CREATED);
     }
 
     // GET - Listar todos os gatos
     @GetMapping
-    public ResponseEntity<List<Gato>> listarGatos() {
+    public ResponseEntity<List<GatoResponseDto>> listarGatos() {
         return ResponseEntity.ok(gatoServices.getAllGatos());
     }
 
     // PUT - Atualizar gato
     @PutMapping("/{id}")
-    public ResponseEntity<Gato> atualizarGato(@PathVariable Long id, @RequestBody GatoRecordDto dto) {
-        GatoRecordDto dtoAtualizado = new GatoRecordDto(
-                id,
-                dto.nome(),
-                dto.raca(),
-                dto.idade(),
-                dto.status_adocao(),
-                dto.status_saude(),
-                dto.id_cliente()
-        );
-        Gato gatoAtualizado = gatoServices.editGato(dtoAtualizado);
+    public ResponseEntity<GatoResponseDto> atualizarGato(@PathVariable Long id, @RequestBody GatoRequestDto dto) {
+        GatoResponseDto gatoAtualizado = gatoServices.editGato(id, dto);
         return ResponseEntity.ok(gatoAtualizado);
     }
 

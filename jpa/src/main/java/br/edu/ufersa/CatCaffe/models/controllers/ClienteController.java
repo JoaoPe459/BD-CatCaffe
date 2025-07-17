@@ -1,6 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.ClienteRecordDto;
+import br.edu.ufersa.CatCaffe.models.dtos.request.ClienteRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.ClienteResponseDto;
 import br.edu.ufersa.CatCaffe.models.entities.Cliente;
 import br.edu.ufersa.CatCaffe.models.services.ClienteServices;
 import org.springframework.http.HttpStatus;
@@ -21,33 +22,35 @@ public class ClienteController {
 
     // POST: Criar novo cliente
     @PostMapping
-    public ResponseEntity<Cliente> criarCliente(@RequestBody ClienteRecordDto dto) {
-        Cliente novoCliente = clienteServices.saveCiente(dto);
+    public ResponseEntity<ClienteResponseDto> criarCliente(@RequestBody ClienteRequestDto dto) {
+        ClienteResponseDto novoCliente = clienteServices.saveCiente(dto);
         return new ResponseEntity<>(novoCliente, HttpStatus.CREATED);
     }
 
-    // Listar todos os clientes
+    // GET: Listar todos os clientes
     @GetMapping
-    public ResponseEntity<List<Cliente>> listarClientes() {
+    public ResponseEntity<List<ClienteResponseDto>> listarClientes() {
         return ResponseEntity.ok(clienteServices.getAllClientes());
     }
 
-    // Atualizar cliente
+    // PUT: Atualizar cliente
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @RequestBody ClienteRecordDto dto) {
-        ClienteRecordDto dtoAtualizado = new ClienteRecordDto(
-                id,
-                dto.nomeCliente(),
-                dto.id_endereco()
-        );
-        Cliente clienteEditado = clienteServices.editCliente(dtoAtualizado);
+    public ResponseEntity<ClienteResponseDto> atualizarCliente(@PathVariable Long id, @RequestBody ClienteRequestDto dto) {
+        ClienteResponseDto clienteEditado = clienteServices.editCliente(id, dto);
         return ResponseEntity.ok(clienteEditado);
     }
 
-    // Deletar cliente
+    // DELETE: Deletar cliente
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
         clienteServices.deleteCliente(id);
         return ResponseEntity.noContent().build();
     }
+
+    // GET: Listar clientes com gatos (endpoint alternativo)
+    @GetMapping("/com-gatos")
+    public ResponseEntity<List<Cliente>> listarClientesComGatos() {
+        return ResponseEntity.ok(clienteServices.getAllClientesComGatos());
+    }
+
 }

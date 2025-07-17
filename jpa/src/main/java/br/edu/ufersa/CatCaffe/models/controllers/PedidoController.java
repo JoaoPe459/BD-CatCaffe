@@ -1,7 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.controllers;
 
-import br.edu.ufersa.CatCaffe.models.dtos.PedidoRecordDto;
-import br.edu.ufersa.CatCaffe.models.entities.Pedido;
+import br.edu.ufersa.CatCaffe.models.dtos.request.PedidoRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.PedidoResponseDto;
 import br.edu.ufersa.CatCaffe.models.services.PedidoServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,32 +21,23 @@ public class PedidoController {
 
     // POST - Criar pedido
     @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody PedidoRecordDto dto) {
-        Pedido novoPedido = pedidoServices.savePedido(dto);
+    public ResponseEntity<PedidoResponseDto> criarPedido(@RequestBody PedidoRequestDto dto) {
+        PedidoResponseDto novoPedido = pedidoServices.savePedido(dto);
         return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
     }
 
     // GET - Listar todos os pedidos
     @GetMapping
-    public ResponseEntity<List<Pedido>> listarPedidos() {
+    public ResponseEntity<List<PedidoResponseDto>> listarPedidos() {
         return ResponseEntity.ok(pedidoServices.getAllPedidos());
     }
 
     // PUT - Atualizar pedido
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> atualizarPedido(@PathVariable Long id, @RequestBody PedidoRecordDto dto) {
-        PedidoRecordDto dtoAtualizado = new PedidoRecordDto(
-                id,
-                dto.id_cliente(),
-                dto.id_funcionario(),
-                dto.data(),
-                dto.hora(),
-                dto.status(),
-                dto.forma_pag()
-        );
-
-        Pedido pedidoAtualizado = pedidoServices.editPedido(dtoAtualizado);
-        return ResponseEntity.ok(pedidoAtualizado);
+    public ResponseEntity<PedidoResponseDto> atualizarPedido(@PathVariable Long id,
+                                                             @RequestBody PedidoRequestDto dto) {
+        PedidoResponseDto atualizado = pedidoServices.editPedido(id, dto);
+        return ResponseEntity.ok(atualizado);
     }
 
     // DELETE - Remover pedido

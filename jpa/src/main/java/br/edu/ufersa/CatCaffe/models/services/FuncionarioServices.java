@@ -1,6 +1,7 @@
 package br.edu.ufersa.CatCaffe.models.services;
 
-import br.edu.ufersa.CatCaffe.models.dtos.FuncionarioRecordDto;
+import br.edu.ufersa.CatCaffe.models.dtos.request.FuncionarioRequestDto;
+import br.edu.ufersa.CatCaffe.models.dtos.response.FuncionarioResponseDto;
 import br.edu.ufersa.CatCaffe.models.entities.Funcionario;
 import br.edu.ufersa.CatCaffe.models.repositories.FuncionarioRepository;
 import jakarta.transaction.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioServices {
@@ -20,18 +22,20 @@ public class FuncionarioServices {
     }
 
     @Transactional
-    public Funcionario saveFuncionario(FuncionarioRecordDto funcionarioRecordDto) {
+    public FuncionarioResponseDto saveFuncionario(FuncionarioRequestDto dto) {
         Funcionario funcionario = new Funcionario();
-        funcionario.setNome(funcionarioRecordDto.nome());
-        funcionario.setSalario(funcionarioRecordDto.salario());
-        funcionario.setCargo(funcionarioRecordDto.cargo());
+        funcionario.setNome(dto.nome());
+        funcionario.setSalario(dto.salario());
+        funcionario.setCargo(dto.cargo());
 
-
-        return funcionarioRepository.save(funcionario);
+        Funcionario salvo = funcionarioRepository.save(funcionario);
+        return new FuncionarioResponseDto(salvo.getId_usuario(), salvo.getNome(), salvo.getSalario(), salvo.getCargo());
     }
 
-    public List<Funcionario> getAllFuncionarios() {
-        return funcionarioRepository.findAll();
+    public List<FuncionarioResponseDto> getAllFuncionarios() {
+        return funcionarioRepository.findAll().stream()
+                .map(f -> new FuncionarioResponseDto(f.getId_usuario(), f.getNome(), f.getSalario(), f.getCargo()))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -43,14 +47,15 @@ public class FuncionarioServices {
     }
 
     @Transactional
-    public Funcionario editFuncionario(FuncionarioRecordDto funcionarioRecordDto) {
-        Funcionario funcionario = funcionarioRepository.findById(funcionarioRecordDto.id_usuario())
+    public FuncionarioResponseDto editFuncionario(Long id, FuncionarioRequestDto dto) {
+        Funcionario funcionario = funcionarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Funcionário não encontrado"));
 
-        funcionario.setNome(funcionarioRecordDto.nome());
-        funcionario.setSalario(funcionarioRecordDto.salario());
-        funcionario.setCargo(funcionarioRecordDto.cargo());
+        funcionario.setNome(dto.nome());
+        funcionario.setSalario(dto.salario());
+        funcionario.setCargo(dto.cargo());
 
-        return funcionarioRepository.save(funcionario);
+        Funcionario atualizado = funcionarioRepository.save(funcionario);
+        return new FuncionarioResponseDto(atualizado.getId_usuario(), atualizado.getNome(), atualizado.getSalario(), atualizado.getCargo());
     }
 }

@@ -30,11 +30,4 @@ public class Usuario {
     @Column(nullable = false,length = 30)
     private String senha;
 
-    public Usuario(String username, String email, String telefone, String senha) {
-        this.username = username;
-        this.email = email;
-        this.telefone = telefone;
-        this.senha = senha;
-    }
-
 }
